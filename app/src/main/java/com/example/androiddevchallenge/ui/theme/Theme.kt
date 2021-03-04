@@ -19,8 +19,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
     primary = Lavender7,
@@ -42,31 +41,6 @@ private val LightColorPalette = lightColors(
     */
 )
 
-private val ThemeColors = MyThemeColors (
-    gradientBackground = listOf(Ocean10, Lavender7),
-    gradientProgress = listOf(Ocean10, Lavender7)
-)
-
-object MyTheme {
-    val colors: MyThemeColors
-        @Composable
-        get() = LocalThemeColors.current
-}
-
-private val LocalThemeColors = staticCompositionLocalOf<MyThemeColors> {
-    error("No JetsnackColorPalette provided")
-}
-
-@Composable
-fun ProvideThemeColors(
-    colors: MyThemeColors,
-    content: @Composable () -> Unit
-) {
-    val colorPalette = remember { colors }
-    colorPalette.update(colors)
-    CompositionLocalProvider(LocalThemeColors provides colorPalette, content = content)
-}
-
 @Composable
 fun MyTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
     val colors = if (darkTheme) {
@@ -80,21 +54,4 @@ fun MyTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() (
         shapes = shapes,
         content = content
     )
-}
-
-
-@Stable
-class MyThemeColors(
-    gradientBackground: List<Color>,
-    gradientProgress: List<Color>) {
-
-    var gradientBackground by mutableStateOf(gradientBackground)
-        private set
-    var gradientProgress by mutableStateOf(gradientProgress)
-        private set
-
-    fun update(other: MyThemeColors) {
-        gradientBackground = other.gradientBackground
-        gradientProgress = other.gradientProgress
-    }
 }

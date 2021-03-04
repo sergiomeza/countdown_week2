@@ -1,15 +1,31 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.androiddevchallenge.viewmodel
 
 import android.annotation.SuppressLint
 import android.os.CountDownTimer
+import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
-class CountDownViewModel: ViewModel() {
+class CountDownViewModel : ViewModel() {
     private var timer: CountDownTimer? = null
 
     private val _isStarted = MutableLiveData(false)
@@ -28,7 +44,7 @@ class CountDownViewModel: ViewModel() {
 
     fun startTimer() {
         val interval = TimeUnit.SECONDS.toMillis(_timeInSeconds.value ?: 0)
-        timer = object: CountDownTimer(interval, 1000) {
+        timer = object : CountDownTimer(interval, 1000) {
             @SuppressLint("SimpleDateFormat")
             override fun onTick(millisUntilFinished: Long) {
                 val formatter = SimpleDateFormat("mm:ss")
@@ -42,13 +58,18 @@ class CountDownViewModel: ViewModel() {
             override fun onFinish() {
                 _labelTimer.postValue("Finished!")
                 _countdownProgress.value = 0F
-                stopTimer()
+                Handler().postDelayed(
+                    {
+                        stopTimer()
+                    },
+                    1200
+                )
             }
         }
         timer?.start()
     }
 
-    fun stopTimer(){
+    fun stopTimer() {
         timer?.apply {
             cancel()
             timer = null
@@ -59,7 +80,7 @@ class CountDownViewModel: ViewModel() {
         _timeInSeconds.value = 0
     }
 
-    fun setSeconds(minutes: Long){
+    fun setSeconds(minutes: Long) {
         _timeInSeconds.postValue(minutes)
     }
 }
