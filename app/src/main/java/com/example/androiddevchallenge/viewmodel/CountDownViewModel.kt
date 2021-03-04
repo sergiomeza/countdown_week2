@@ -41,7 +41,6 @@ class CountDownViewModel: ViewModel() {
                 _countdownProgress.value =
                     millisUntilFinished.toFloat() / 1000 / _timeInSeconds.value!!
                 _isStarted.value = true
-                Log.d("TAG", "onTick: Prog..${_countdownProgress.value}")
             }
             override fun onFinish() {
                 _labelTimer.postValue("Finished!")
