@@ -2,15 +2,12 @@ package com.example.androiddevchallenge.viewmodel
 
 import android.annotation.SuppressLint
 import android.os.CountDownTimer
-import android.os.Handler
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.math.log
 
 class CountDownViewModel: ViewModel() {
     private var timer: CountDownTimer? = null
@@ -45,9 +42,7 @@ class CountDownViewModel: ViewModel() {
             override fun onFinish() {
                 _labelTimer.postValue("Finished!")
                 _countdownProgress.value = 0F
-                Handler().postDelayed({
-                    stopTimer()
-                }, 1200)
+                stopTimer()
             }
         }
         timer?.start()
